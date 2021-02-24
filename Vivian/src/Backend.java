@@ -1,10 +1,11 @@
 import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Backend {
 
-    public Backend(File CSVFile) {
+    public Backend(FileReader reader) {
 
     }
 

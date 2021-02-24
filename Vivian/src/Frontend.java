@@ -7,7 +7,8 @@
 // Lecturer: Florian Heimerl
 // Notes to Grader: N/A
 
-import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.List;
 import java.util.Scanner;
 
@@ -21,17 +22,23 @@ public class Frontend {
     private static final Scanner READIN = new Scanner(System.in);
 
     /**
-     * This method selects all the ratings, and runs the program.
-     * @param args takes a path to a CSV file
+     * This method calls the run method to start the program.
      */
     public static void main(String[] args) {
-        String path = args[0];
-        File CSVFile = new File(path);
-        (new Frontend()).run(new Backend(CSVFile));
+        (new Frontend()).run();
     }
 
-    public void run(Backend backend) {
-        this.backend = backend;
+    /**
+     * This method paths to the CSV file, initializes the backend, selects all the ratings, and runs the base mode.
+     */
+    public void run() {
+        String path = "movies.csv";
+        try {
+            FileReader reader = new FileReader(path);
+            // backend = new Backend(reader);
+        } catch (FileNotFoundException e) {
+            System.out.println("CSV file not found!");
+        }
 
         // all ratings 0-10 are selected
         for (int i = 0; i < 11; i++) {
