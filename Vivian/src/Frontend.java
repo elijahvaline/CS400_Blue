@@ -72,7 +72,8 @@ public class Frontend {
         while (!isDone) {
             // lists the top 3 (by avg rating) selected movies
             List<MovieInterface> threeMovies = backend.getThreeMovies(startingIndex);
-            if (threeMovies == null || threeMovies.isEmpty()) {
+            if (backend.getGenres() == null || backend.getGenres().isEmpty()
+                    || threeMovies == null || threeMovies.isEmpty()) {
                 // initially, no movies are listed until a genre is chosen
                 System.out.println("Select at least one genre to get your movie recommendations!");
             } else {

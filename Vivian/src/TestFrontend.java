@@ -14,21 +14,19 @@ public class TestFrontend {
      * for each test.
      */
     public void runTests() {
-        System.out.print("Test enter 'x' to exit (WARNING: if 'x' does not exit app, test won't exit and run " +
-                "indefinitely!): ");
+        System.out.print("Test enter 'x' to exit (WARNING: if 'x' does not exit app, test won't exit and run indefinitely!): ");
         if (this.enterXToExit()) {
             System.out.println("PASSED");
         } else {
             System.out.println("FAILED");
         }
-        /*System.out.print("Test frontend initially lists no movie (WARNING: if 'x' does not exit app, test won't
-        exit and run indefinitely!): ");
+        System.out.print("Test frontend initially lists no movie (WARNING: if 'x' does not exit app, test won't exit and run indefinitely!): ");
 
         if (this.testFrontendInitialOutputNoMovie()) {
             System.out.println("PASSED");
         } else {
             System.out.println("FAILED");
-        }*/
+        }
         System.out.print("Test 'g' load genre selection screen (WARNING: if pressing 'x' twice from the genre selection screen does not exit app, test won't exit and run indefinitely!): ");
         if (this.testFrontendGForGenres()) {
             System.out.println("PASSED");
@@ -297,7 +295,7 @@ public class TestFrontend {
             System.setIn(standardIn);
             // add all tests to this method
             String appOutput = outputStreamCaptor.toString();
-            if (frontend != null || appOutput.contains("The Source of Shadows")
+            if (frontend == null || appOutput.contains("The Source of Shadows")
                     || appOutput.contains("The Insurrection") || !appOutput.contains("Valley Girl")) {
                 // test failed
                 return false;
