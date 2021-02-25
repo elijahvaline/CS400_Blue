@@ -18,31 +18,37 @@ import java.util.Scanner;
  * their movies recommendations.
  */
 public class Frontend {
-    private static Backend backend;
-    private static final Scanner READIN = new Scanner(System.in);
+    private Backend backend; // backend interface
+    private final Scanner READIN = new Scanner(System.in); // reads in the user's input
 
     /**
-     * This method calls the run method to start the program.
+     * This method initializes the backend with the file reader and runs the program.
      */
     public static void main(String[] args) {
-        (new Frontend()).run();
+        String path = "movies.csv";
+        Backend back;
+        try {
+            FileReader reader = new FileReader(path);
+            back = new Backend(reader);
+        } catch (FileNotFoundException e) {
+            System.out.println("CSV file not found!");
+            return;
+        }
+
+        (new Frontend()).run(back);
     }
 
     /**
-     * This method paths to the CSV file, initializes the backend, selects all the ratings, and runs the base mode.
+     * This method initializes the backend, selects all of the ratings, and runs the base mode.
+     * @param backend passed can be the one initialized with the file reader in the main method or one created for
+     *                testing purposes
      */
-    public void run() {
-        String path = "movies.csv";
-        try {
-            FileReader reader = new FileReader(path);
-            // backend = new Backend(reader);
-        } catch (FileNotFoundException e) {
-            System.out.println("CSV file not found!");
-        }
+    public void run(Backend backend) {
+        this.backend = backend;
 
         // all ratings 0-10 are selected
         for (int i = 0; i < 11; i++) {
-            backend.addAvgRating("" + i);
+            this.backend.addAvgRating("" + i);
         }
 
         baseMode();
@@ -56,7 +62,7 @@ public class Frontend {
      * enter in a valid integer that pertains to a movie rank or a valid command of "x", "g", and "r." If "g" or "r"
      * is inputted, the mode will switch. This method ends when the user inputs "x" to exit the program.
      */
-    private static void baseMode() {
+    private void baseMode() {
         System.out.println("WELCOME TO MOVIE MAPPER!");
 
         // loops base mode until user inputs "g", "r", or "x"
@@ -65,14 +71,16 @@ public class Frontend {
         boolean isDone = false;
         while (!isDone) {
             // lists the top 3 (by avg rating) selected movies
-            List<Movie> threeMovies = backend.getThreeMovies(startingIndex);
+            List<MovieInterface> threeMovies = backend.getThreeMovies(startingIndex);
             if (threeMovies == null || threeMovies.isEmpty()) {
                 // initially, no movies are listed until a genre is chosen
                 System.out.println("Select at least one genre to get your movie recommendations!");
             } else {
                 System.out.println("Recommended Movies:");
-                for (int i = startingIndex; i < startingIndex + 3; i++) {
-                    System.out.println((i+1) + ". " + threeMovies.get(i).getTitle());
+                for (MovieInterface movie : threeMovies) {
+                    // lists the movie rank and its title
+                    System.out.println((startingIndex+1) + ". " + movie.getTitle());
+                    startingIndex += 1;
                 }
             }
 
@@ -84,16 +92,18 @@ public class Frontend {
                     "*------------------------------------------*");
 
             System.out.print("Enter a command: ");
+            // loops until the user inputs a valid #, "g", "r", or "x"
             boolean isValid = false;
             while (!isValid) {
                 input = READIN.nextLine();
-                if (input.equalsIgnoreCase("g")
-                        || input.equalsIgnoreCase("r")
-                        || input.equalsIgnoreCase("x")) {
+
+                // exits loop if the input is "g", "r", or "x"
+                if (input.equalsIgnoreCase("g") || input.equalsIgnoreCase("r") || input.equalsIgnoreCase("x")) {
                     isDone = true;
                     break;
                 }
-                // ensures input is an integer
+
+                // if input is not "g", "r", or "x", ensures input is an integer
                 try {
                     // ensures input pertains to a movie rank
                     if (Integer.parseInt(input) >= 1 && Integer.parseInt(input) <= backend.getNumberOfMovies()) {
@@ -104,6 +114,7 @@ public class Frontend {
                         System.out.print("Enter a # corresponding to a rank: ");
                     }
                 } catch (NumberFormatException e) {
+                    // if the input is a String but is not "g", "r", or "x", try again
                     System.out.print("Please enter in a valid command: ");
                 }
             }
@@ -128,7 +139,7 @@ public class Frontend {
      * will be updated after every selection/deselection. Selected genres will be marked with an *. This method ends
      * when the user inputs "x" to return to the base mode.
      */
-    private static void genreSelectionMode() {
+    private void genreSelectionMode() {
         System.out.println("GENRE SELECTION");
 
         // loops until user inputs "x" to exit to base mode
@@ -152,14 +163,19 @@ public class Frontend {
                     "| Enter # corresponding to genre to select or deselect. |\n" +
                     "| Press 'x' to return to home screen.                   |\n" +
                     "*-------------------------------------------------------*");
+
             System.out.print("Enter a command: ");
+            // loops until user inputs a valid # or "x"
             boolean isValid = false;
             while (!isValid) {
                 input = READIN.nextLine();
+
+                // exit loops if the input is "x"
                 if (input.equalsIgnoreCase("x")) {
                     isDone = true;
                     break;
                 }
+
                 // ensures input is an integer
                 try {
                     // ensures input pertains to a genre
@@ -193,10 +209,10 @@ public class Frontend {
      * the input is not 0-10 or "x." The list of selected ratings will be updated whenever a rating is selected or
      * deselected. This method ends when the user enters "x" to exit to base mode.
      */
-    private static void ratingsSelectionMode() {
+    private void ratingsSelectionMode() {
         System.out.println("RATINGS SELECTION");
 
-        // loops until user inputs "x" to exit to base mode
+        // loops until user inputs "x"
         String input;
         boolean isDone = false;
         while (!isDone) {
@@ -214,12 +230,14 @@ public class Frontend {
                     "| Enter rating 0-10 to select or deselect. |\n" +
                     "| Press 'x' to return to home screen.      |\n" +
                     "*------------------------------------------*");
-            System.out.print("Enter a command: ");
 
-            // loops until user inputs a valid command
+            System.out.print("Enter a command: ");
+            // loops until user inputs a # 0-10 or "x"
             boolean isValid = false;
             while (!isValid) {
                 input = READIN.nextLine();
+
+                // exits if the input is "x"
                 if (input.equalsIgnoreCase("x")) {
                     isDone = true;
                     break;
