@@ -1,7 +1,11 @@
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.ArrayList;
 import java.io.Reader;
+import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.util.Scanner;
 
 
 public class Backend implements BackendInterface {
@@ -9,15 +13,17 @@ public class Backend implements BackendInterface {
   private List<Movie> selectedMovies;
   private List<String> selectedGenres;
   private List<String> selectedRatings;
-
+  private List<String> allGenres;
+  private List<MovieInterface> allMovieObjects;
+  
   private HashTableMap<String, List<Movie>> hashMap;
 
   public Backend(FileReader movieFile) {
-    
+
     MovieDataReader getMovies = new MovieDataReader();
     try {
-      List<Movie> movieList = getMovies.readDataSet(movieFile);
-      hashFiller(movieList);
+      allMovieObjects = getMovies.readDataSet(movieFile);
+      hashFiller();
 
     } catch (Exception e) {
       System.out.println(e);
@@ -26,32 +32,54 @@ public class Backend implements BackendInterface {
   }
 
   public Backend(Reader s) {
-
+ String line = "";
+    
+    Scanner scanner = new Scanner(s);
+   
+    while(scanner.hasNextLine()) {
+      line += (scanner.nextLine() + "\n");
+    }  
+    scanner.close();
+    
+    try {
+    File file = new File("Movies");
+    FileWriter writer = new FileWriter(file);
+    writer.write(line);
+    
+    writer.close();
+    FileReader read = new FileReader(file);
+    
+    MovieDataReader getMovies = new MovieDataReader();
+    allMovieObjects = getMovies.readDataSet(read);
+    hashFiller();
+    }
+    catch(Exception e){}
+    
   }
-  
+
   // ORDER BY RATING
-  private void hashFiller(List<Movie> movies) {
+  private void hashFiller() {
     hashMap = new HashTableMap<String, List<Movie>>();
     selectedGenres = new ArrayList<String>();
     selectedRatings = new ArrayList<String>();
     selectedMovies = new ArrayList<Movie>();
 
-    for (Movie x : movies) {
+    for (MovieInterface x : allMovieObjects) {
       String avgRate = "" + (int) Math.floor(x.getAvgVote());
       if (!(hashMap.put(avgRate, new ArrayList<Movie>() {
         {
-          add(x);
+          add((Movie) x);
         }
       }))) {
-        hashMap.get(avgRate).add(x);
+        hashMap.get(avgRate).add((Movie) x);
       }
       for (String genre : x.getGenres()) {
         if (!(hashMap.put(genre, new ArrayList<Movie>() {
           {
-            add(x);
+            add((Movie) x);
           }
         }))) {
-          hashMap.get(genre).add(x);
+          hashMap.get(genre).add((Movie) x);
         }
       }
     }
@@ -89,35 +117,36 @@ public class Backend implements BackendInterface {
     if (selectedRatings.contains(rating)) {
 
     } else {
-      selectedRatings.add(rating);
-      if (selectedGenres.isEmpty())
-        selectedMovies.addAll(hashMap.get(rating));
+      try {
+        selectedRatings.add(rating);
+        if (selectedGenres.isEmpty())
+          selectedMovies.addAll(hashMap.get(rating));
 
-      // CONDITIONAL IF THIS IS THE FIRST RATING
-      else if (selectedRatings.size() == 1) {
-        List<Movie> toBeRemoved = new ArrayList<Movie>();
-        for (Movie x : selectedMovies) {
-          String avgRate = "" + (int) Math.floor(x.getAvgVote());
-          if (!(avgRate.equals(rating)))
-            toBeRemoved.add(x);
-        }
-        selectedMovies.removeAll(toBeRemoved);
-      }
-
-
-      else {
-        for (Movie x : hashMap.get(rating)) {
-          Boolean contains = true;
-          for (String genre : selectedGenres) {
-            if (!(x.getGenres().contains(genre)))
-              contains = false;
+        // CONDITIONAL IF THIS IS THE FIRST RATING
+        else if (selectedRatings.size() == 1) {
+          List<Movie> toBeRemoved = new ArrayList<Movie>();
+          for (Movie x : selectedMovies) {
+            String avgRate = "" + (int) Math.floor(x.getAvgVote());
+            if (!(avgRate.equals(rating)))
+              toBeRemoved.add(x);
           }
-          if (contains == true)
-            selectedMovies.add(x);
-
+          selectedMovies.removeAll(toBeRemoved);
         }
-      }
 
+
+        else {
+          for (Movie x : hashMap.get(rating)) {
+            Boolean contains = true;
+            for (String genre : selectedGenres) {
+              if (!(x.getGenres().contains(genre)))
+                contains = false;
+            }
+            if (contains == true)
+              selectedMovies.add(x);
+
+          }
+        }
+      } catch (NoSuchElementException e) {}
     }
   }
 
@@ -160,11 +189,17 @@ public class Backend implements BackendInterface {
 
         selectedMovies.clear();
         for (String x : selectedGenres) {
+          try {
           selectedMovies.addAll(hashMap.get(x));
+          }
+          catch(NoSuchElementException e) {}
         }
 
       } else {
+        try {
         selectedMovies.removeAll(hashMap.get(rating));
+        }
+        catch(NoSuchElementException e) {}
       }
     }
   }
@@ -188,15 +223,15 @@ public class Backend implements BackendInterface {
 
   @Override
   public List<String> getAllGenres() {
-    List<String> allGenres = new ArrayList<String>();
-
-    for (Movie x : selectedMovies) {
-      for (String g : x.getGenres()) {
-        if (!allGenres.contains(g))
-          allGenres.add(g);
-      }
+    if(allGenres == null) {
+    allGenres = new ArrayList<String>();
+      for(MovieInterface movie: allMovieObjects) {
+        for(String genre: movie.getGenres()) {
+        if(!allGenres.contains(genre)) allGenres.add(genre);
+        }
     }
-    return allGenres;
+    }
+   return allGenres;
   }
 
   @Override
