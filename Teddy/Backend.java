@@ -33,23 +33,28 @@ public class Backend implements BackendInterface {
   private List<MovieInterface> allMovieObjects;
   private HashTableMap<String, List<Movie>> hashMap;
 
-  /**
+ /**
    * Backend constructor accepts a FileReader argument which is then passed to the MovieDataReader
    * class in order to obtain a list of all movie objects.
    * 
-   * @param movieFile - Object of type FileReader that will be passed to the MovieDataReader class
+   * @param args - Array of Strings representing command line arguments.
    */
-  public Backend(FileReader movieFile) {
-    MovieDataReader getMovies = new MovieDataReader();
+  public Backend(String[] args) {
+    String path = args[0];
+    File csvPath = new File(path);
 
-    // Try catch passes the FileReader to the MovieDataReader instance, catches an exception if the
-    // FileReader is null.
-    try {
-      allMovieObjects = getMovies.readDataSet(movieFile);
-      // A call is then made to the private method hashFiller to populate the hashtable
-      hashFiller();
-    } catch (Exception e) {
-      System.out.println(e);
+    if (csvPath.isFile()) {
+      // Try catch passes the FileReader to the MovieDataReader instance, catches an exception if
+      // the FileReader is null.
+      try {
+        MovieDataReader getMovies = new MovieDataReader();
+        FileReader movieFile = new FileReader(csvPath);
+        allMovieObjects = getMovies.readDataSet(movieFile);
+        // A call is then made to the private method hashFiller to populate the hashtable
+        hashFiller();
+      } catch (Exception e) {
+        System.out.println(e);
+      }
     }
   }
 
