@@ -1,5 +1,17 @@
+// --== CS400 File Header Information ==--
+// Name: Manisha Pillai
+// Email: mvpillai@wisc.edu 
+// Team: Blue
+// Group: HA
+// TA: Hang Yin
+// Lecturer: Gary Dahl
+
 import java.util.List;
 
+/*This class implements the MoveInterface and represents the movie object, which stores
+ * and provides access to the movie's title, year, genres, director, description and 
+ * average votes
+ * */
 public class Movie implements MovieInterface{
 	
 	private String title;
@@ -9,6 +21,9 @@ public class Movie implements MovieInterface{
 	private String description;
 	private Float votes;
 	
+	/*This method constructs the movie object
+	 * @param title, year, genres, director, description and votes
+	 * */
 	public Movie(String title, Integer year, List<String> genres, String director,
 			String description, Float votes) {
 		this.title = title;
@@ -19,6 +34,8 @@ public class Movie implements MovieInterface{
 		this.votes = votes;
 	}
 
+	/*The following methods all provide access to the information stored in the movie object
+	 * */
 	@Override
 	public String getTitle() {
 		return title;
@@ -49,6 +66,10 @@ public class Movie implements MovieInterface{
 		return votes;
 	}
 
+	/*This method overrides the compareTo method and compares the movies based on their
+	 * average vote. It is designed so that the movies will be sorted in descending order
+	 * of the average votes.
+	 * */
 	@Override
 	public int compareTo(MovieInterface otherMovie) {
 		// TODO Auto-generated method stub
