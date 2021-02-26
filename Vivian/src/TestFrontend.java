@@ -1,3 +1,12 @@
+// --== CS400 File Header Information ==--
+// Name: Vivian Lacson
+// Email: vlacson@wisc.edu
+// Team: Blue
+// Group: HA
+// TA: Hang Yin
+// Lecturer: Florian Heimerl
+// Notes to Grader: N/A
+
 import java.io.*;
 
 /**

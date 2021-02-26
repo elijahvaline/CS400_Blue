@@ -9,6 +9,7 @@
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.Reader;
 import java.util.List;
 import java.util.Scanner;
 
@@ -22,17 +23,23 @@ public class Frontend {
     private final Scanner READIN = new Scanner(System.in); // reads in the user's input
 
     /**
-     * This method initializes the backend with the file reader and runs the program.
+     * This method initializes the backend with the command line arguments or csv file data and runs the program.
      */
     public static void main(String[] args) {
-        String path = "movies.csv";
         Backend back;
-        try {
-            FileReader reader = new FileReader(path);
-            back = new Backend(reader);
-        } catch (FileNotFoundException e) {
-            System.out.println("CSV file not found!");
-            return;
+        if (args.length > 0) {
+            // if there are command line arguments passed, pass it to the backend
+            back = new Backend(args);
+        } else {
+            // if there are no args, create a file reader with the csv file data
+            String path = "movies.csv";
+            try {
+                Reader reader = new FileReader(path);
+                back = new Backend(reader);
+            } catch (FileNotFoundException e) {
+                System.out.println("CSV file not found!");
+                return;
+            }
         }
 
         (new Frontend()).run(back);
@@ -40,8 +47,7 @@ public class Frontend {
 
     /**
      * This method initializes the backend, selects all of the ratings, and runs the base mode.
-     * @param backend passed can be the one initialized with the file reader in the main method or one created for
-     *                testing purposes
+     * @param backend interface
      */
     public void run(Backend backend) {
         this.backend = backend;
