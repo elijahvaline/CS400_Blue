@@ -49,7 +49,6 @@ public class MovieDataReader implements MovieDataReaderInterface{
 				Integer year = Integer.parseInt(str[2]);
 				List<String> genre = new ArrayList<String>();
 				str[3] = str[3].replace("\"", "");
-				System.out.println(str[3]);
 				String[] gen = str[3].split(",");
 				for(int i=0;i<gen.length;i++) {
 					genre.add(gen[i]);
