@@ -33,27 +33,32 @@ public class Backend implements BackendInterface {
   private List<MovieInterface> allMovieObjects;
   private HashTableMap<String, List<Movie>> hashMap;
 
-  /**
+ /**
    * Backend constructor accepts a FileReader argument which is then passed to the MovieDataReader
    * class in order to obtain a list of all movie objects.
    * 
-   * @param movieFile - Object of type FileReader that will be passed to the MovieDataReader class
+   * @param args - Array of Strings representing command line arguments.
    */
-  public Backend(FileReader movieFile) {
-    MovieDataReader getMovies = new MovieDataReader();
+  public Backend(String[] args) {
+    String path = args[0];
+    File csvPath = new File(path);
 
-    // Try catch passes the FileReader to the MovieDataReader instance, catches an exception if the
-    // FileReader is null.
-    try {
-      allMovieObjects = getMovies.readDataSet(movieFile);
-      // A call is then made to the private method hashFiller to populate the hashtable
-      hashFiller();
-    } catch (Exception e) {
-      System.out.println(e);
+    if (csvPath.isFile()) {
+      // Try catch passes the FileReader to the MovieDataReader instance, catches an exception if
+      // the FileReader is null.
+      try {
+        MovieDataReader getMovies = new MovieDataReader();
+        FileReader movieFile = new FileReader(csvPath);
+        allMovieObjects = getMovies.readDataSet(movieFile);
+        // A call is then made to the private method hashFiller to populate the hashtable
+        hashFiller();
+      } catch (Exception e) {
+        System.out.println(e);
+      }
     }
   }
 
-  /**
+/**
    * Backend constructor accepts a Reader argument which is then scanned, turned into a file, passed
    * to the FileReader class, and ultimately passed back to the MovieDataReaderInterface
    * implementation.
@@ -61,28 +66,33 @@ public class Backend implements BackendInterface {
    * @param s - Object of type Reader that will be scanned and used to retrieve movie objects.
    */
   public Backend(Reader s) {
-    String line = "";
-    Scanner scanner = new Scanner(s);
-
-    // scanner scans the Reader object and creates a string of all movie data.
-    while (scanner.hasNextLine()) {
-      line += (scanner.nextLine() + "\n");
-    }
-    scanner.close();
-
-    // A new File is created and the String of movie data is written in.
     try {
-      File file = new File("Movies");
-      FileWriter writer = new FileWriter(file);
-      writer.write(line);
-      writer.close();
-
-      // The updated file is then used to construct a FileReader object which is passed to the
-      // MovieDataReader class.
-      FileReader read = new FileReader(file);
       MovieDataReader getMovies = new MovieDataReader();
-      allMovieObjects = getMovies.readDataSet(read);
-      hashFiller();
+      if (s instanceof FileReader) {
+        allMovieObjects = getMovies.readDataSet((FileReader) s);
+        hashFiller();
+      } else {
+        String line = "";
+        Scanner scanner = new Scanner(s);
+
+        // scanner scans the Reader object and creates a string of all movie data.
+        while (scanner.hasNextLine()) {
+          line += (scanner.nextLine() + "\n");
+        }
+        scanner.close();
+
+        // A new File is created and the String of movie data is written in.
+        File file = new File("Movies");
+        FileWriter writer = new FileWriter(file);
+        writer.write(line);
+        writer.close();
+
+        // The updated file is then used to construct a FileReader object which is passed to the
+        // MovieDataReader class.
+        FileReader read = new FileReader(file);
+        allMovieObjects = getMovies.readDataSet(read);
+        hashFiller();
+      }
     } catch (Exception e) {
     }
   }
