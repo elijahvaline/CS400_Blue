@@ -186,7 +186,7 @@ public class Frontend {
                 // ensures input is an integer
                 try {
                     // ensures input pertains to a genre
-                    if (Integer.parseInt(input) > 0 && Integer.parseInt(input) < allGenres.size()) {
+                    if (Integer.parseInt(input) > 0 && Integer.parseInt(input) <= allGenres.size()) {
                         if (selected == null || selected.isEmpty() || !selected.contains(allGenres.get(Integer.parseInt(input) - 1))) {
                             // if there are no genres selected, or if the genre is not selected, select it
                             backend.addGenre(allGenres.get(Integer.parseInt(input) - 1));

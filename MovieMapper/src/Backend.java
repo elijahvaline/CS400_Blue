@@ -10,6 +10,7 @@
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.io.Reader;
 import java.io.File;
 import java.io.FileReader;
@@ -107,7 +108,6 @@ public class Backend implements BackendInterface {
     selectedRatings = new ArrayList<String>();
     selectedMovies = new ArrayList<Movie>();
 
-
     // Iterates through movie object ratings and creates new key value pairs in hashMap if the pair
     // does not already exist. If it exists, the movie object is added to the to pairs value array.
     for (MovieInterface x : allMovieObjects) {
@@ -117,19 +117,15 @@ public class Backend implements BackendInterface {
           add((Movie) x);
         }
       }))) {
-        hashMap.get(avgRate).add((Movie) x);
+        ((List<Movie>) hashMap.get(avgRate)).add((Movie) x);
       }
 
       // Iterates through movie object genres and creates new key value pairs in hashMap if the pair
       // does not already exist. If it exists, the movie object is added to the to pairs value
       // array.
       for (String genre : x.getGenres()) {
-        if (!(hashMap.put(genre, new ArrayList<Movie>() {
-          {
-            add((Movie) x);
-          }
-        }))) {
-          hashMap.get(genre).add((Movie) x);
+        if (!(hashMap.put(genre, new ArrayList<Movie>() {{add((Movie) x);}}))) {
+          ((List<Movie>) hashMap.get(genre)).add((Movie) x);
         }
       }
     }
@@ -150,7 +146,7 @@ public class Backend implements BackendInterface {
       selectedGenres.add(genre);
 
       if (selectedMovies.isEmpty()) {
-        selectedMovies = hashMap.get(genre);
+        selectedMovies = (List<Movie>) hashMap.get(genre);
       } else {
         // Every movie in the selected movie set that does not contain the new genre is removed.
 
@@ -181,7 +177,7 @@ public class Backend implements BackendInterface {
 
         // If selected genres is empty, then every movie with the rating can be added.
         if (selectedGenres.isEmpty())
-          selectedMovies.addAll(hashMap.get(rating));
+          selectedMovies.addAll((Collection<? extends Movie>) hashMap.get(rating));
 
         // If this is the first rating, all movies in the selected set that don't contain the rating
         // are removed.
@@ -198,7 +194,7 @@ public class Backend implements BackendInterface {
         // Else selectedGenres is not empty, in which case movies that contain the rating are only
         // added if they contain the list of selected genres.
         else {
-          for (Movie x : hashMap.get(rating)) {
+          for (Movie x : (Collection<? extends Movie>)hashMap.get(rating)) {
             Boolean contains = true;
             for (String genre : selectedGenres) {
               if (!(x.getGenres().contains(genre)))
@@ -265,14 +261,14 @@ public class Backend implements BackendInterface {
         selectedMovies = new ArrayList<Movie>();
         for (String x : selectedGenres) {
           try {
-            selectedMovies.addAll(hashMap.get(x));
+            selectedMovies.addAll((Collection<? extends Movie>) hashMap.get(x));
           } catch (NoSuchElementException e) {
           }
         }
       } else {
         // Else every movie that contains the rating is removed from the selectedMovies list.
         try {
-          selectedMovies.removeAll(hashMap.get(rating));
+          selectedMovies.removeAll((Collection<?>) hashMap.get(rating));
         } catch (NoSuchElementException e) {
         }
       }

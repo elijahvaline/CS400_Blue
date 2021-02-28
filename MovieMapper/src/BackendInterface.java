@@ -2,7 +2,7 @@ import java.util.List;
 
 public interface BackendInterface {
     public void addGenre(String genre);
-    public void addAvgTating(String rating);
+    public void addAvgRating(String rating);
     public void removeGenre(String genre);
     public void removeAvgRating(String rating);
     public List<String> getGenres();
