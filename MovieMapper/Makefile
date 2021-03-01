@@ -1,10 +1,20 @@
 Test: Compile
+	@echo
+	@echo "Frontend Tests:"
 	java TestFrontend
+	@echo
+	@echo "Backend Tests:"
+	java TestBackend
+	@echo
+	@echo "Data Reader Tests:"
+	java TestMovieDataReader
 	
 Run: Compile
-	java Frontend
+	@echo
+	@java Frontend
 
-Compile: Frontend.class Backend.class Movie.class MovieDataReader.class MovieDataReaderInterface.class HashTableMap.class MapADT.class MovieInterface.class BackendInterface.class TestFrontend.class
+
+Compile: Frontend.class Backend.class Movie.class MovieDataReader.class MovieDataReaderInterface.class HashTableMap.class MapADT.class MovieInterface.class BackendInterface.class TestFrontend.class TestBackend.class TestMovieDataReader.class
 
 
 Frontend.class: Frontend.java
@@ -36,5 +46,11 @@ BackendInterface.class: BackendInterface.java
 	
 TestFrontend.class: TestFrontend.java
 	javac TestFrontend.java
+
+TestBackend.class: TestBackend.java
+	javac TestBackend.java
+
+TestMovieDataReader.class: TestMovieDataReader.java
+	javac TestMovieDataReader.java
 
 
