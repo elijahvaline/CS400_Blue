@@ -1,9 +1,4 @@
-// Name: Elijah Valine
-// Email: valine@wisc.edu
-// Team: blue
-// Group: HA
-// TA: Hang Y
-// Lecturer: Florian
+
 
 import java.util.NoSuchElementException;
 
