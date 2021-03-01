@@ -74,9 +74,9 @@ public class Movie implements MovieInterface{
 	public int compareTo(MovieInterface otherMovie) {
 		// TODO Auto-generated method stub
 		if(votes>otherMovie.getAvgVote())
-			return -1;
-		if(votes<otherMovie.getAvgVote())
 			return 1;
+		if(votes<otherMovie.getAvgVote())
+			return -1;
 		return 0;
 	}
 
