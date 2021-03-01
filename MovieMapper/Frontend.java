@@ -85,8 +85,8 @@ public class Frontend {
             } else {
                 System.out.println("Recommended Movies:");
                 for (MovieInterface movie : threeMovies) {
-                    // lists the movie rank and its title
-                    System.out.println((startingIndex+1) + ". " + movie.getTitle());
+                    // lists the movie rank and its info
+                    System.out.println((startingIndex+1) + ". " + movie + "\n");
                     startingIndex += 1;
                 }
             }
@@ -261,6 +261,7 @@ public class Frontend {
                             // if inputted rating is not already selected, then select it
                             backend.addAvgRating(input);
                         }
+                        System.out.println("");
                         isValid = true;
                     } else {
                         // if the input is not 0-10, try again

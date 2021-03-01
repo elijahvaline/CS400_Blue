@@ -272,7 +272,7 @@ public class TestFrontend {
 
     /**
      * This test runs the front end and redirects its output to a string. It then passes in 'g' as a command to go
-     * the genres selection mode. It then passes in '3' to select the genre comedy. It then exits
+     * the genres selection mode. It then passes in '1' to select the genre action. It then exits
      * the app by pressing 'x' to go back to the main mode and another 'x' to exit. The test succeeds if the base
      * mode screen has all the movies with the genre comedy. It fails if the correct movies are not shown, the front
      * end has not been instantiated (is null), or there is an exception.
@@ -305,7 +305,7 @@ public class TestFrontend {
             // add all tests to this method
             String appOutput = outputStreamCaptor.toString();
             if (frontend == null || appOutput.contains("The Source of Shadows")
-                    || appOutput.contains("The Insurrection") || !appOutput.contains("Valley Girl")) {
+                    || appOutput.contains("Valley Girl") || !appOutput.contains("The Insurrection")) {
                 // test failed
                 return false;
             } else {
