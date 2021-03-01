@@ -10,7 +10,9 @@ Test: Compile
 	java TestMovieDataReader
 	
 Run: Compile
-	java Frontend
+	@echo
+	@java Frontend
+
 
 Compile: Frontend.class Backend.class Movie.class MovieDataReader.class MovieDataReaderInterface.class HashTableMap.class MapADT.class MovieInterface.class BackendInterface.class TestFrontend.class TestBackend.class TestMovieDataReader.class
 
