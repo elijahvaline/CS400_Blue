@@ -72,12 +72,20 @@ public class Movie implements MovieInterface{
 	 * */
 	@Override
 	public int compareTo(MovieInterface otherMovie) {
-		// TODO Auto-generated method stub
 		if(votes>otherMovie.getAvgVote())
 			return 1;
 		if(votes<otherMovie.getAvgVote())
 			return -1;
 		return 0;
+	}
+	
+	/*This method overrides the toString method and displays the movie's title, genres,
+	 * directord, description and average votes.
+	 * */
+	@Override
+	public String toString() {
+		return "Title: "+getTitle()+" \nGenre(s): "+getGenres()+"\nDirector: "+getDirector()+
+				"\nDescription: "+getDescription()+"\nAverage Vote: "+getAvgVote();
 	}
 
 }

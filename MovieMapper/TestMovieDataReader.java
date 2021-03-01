@@ -31,11 +31,11 @@ public class TestMovieDataReader {
 			if(movieList.size()!=231)
 				return false;
 			//tests movies are in descending order by average votes
-			if(movieList.get(5).getAvgVote()<movieList.get(60).getAvgVote())
+			if(movieList.get(5).getAvgVote()>movieList.get(60).getAvgVote())
 				return false;
-			if(movieList.get(130).getAvgVote()<movieList.get(200).getAvgVote())
+			if(movieList.get(130).getAvgVote()>movieList.get(200).getAvgVote())
 				return false;
-			if(movieList.get(200).getAvgVote()<movieList.get(230).getAvgVote())
+			if(movieList.get(200).getAvgVote()>movieList.get(230).getAvgVote())
 				return false;
 			return true;
 		}
@@ -74,29 +74,29 @@ public class TestMovieDataReader {
 			MovieDataReader read = new MovieDataReader();
 			FileReader f = new FileReader("movies.csv");
 			List<MovieInterface> movieList = read.readDataSet(f);
-			if(!movieList.get(5).getTitle().equals("Stanley Stanton"))
+			if(!movieList.get(225).getTitle().equals("Stanley Stanton"))
 				return false;
-			if(movieList.get(5).getYear()!=2019)
+			if(movieList.get(225).getYear()!=2019)
 				return false;
 			//checks singular genre
 			List<String> list = new ArrayList<String>();
 			list.add("Drama");
-			if(!movieList.get(5).getGenres().equals(list))
+			if(!movieList.get(225).getGenres().equals(list))
 				return false;
 			//checks with multiple genres, and that "" have been removed
 			List<String> list2 = new ArrayList<String>();
 			list2.add("Adventure");
 			list2.add("Comedy");
 			list2.add("Drama");
-			if(!movieList.get(2).getGenres().equals(list2))
+			if(!movieList.get(228).getGenres().equals(list2))
 				return false;
-			if(!movieList.get(5).getDirector().equals("Mars McCracken"))
+			if(!movieList.get(225).getDirector().equals("Mars McCracken"))
 				return false;
-			if(!movieList.get(5).getDescription().equals("\"Forced to watch flashbacks "
+			if(!movieList.get(225).getDescription().equals("\"Forced to watch flashbacks "
 					+ "of his life, a pious man comes to the realization he's dead and on "
 					+ "his way to hell. Inspired by a true event.\""))
 				return false;
-			if(movieList.get(5).getAvgVote().compareTo((float)8.7)!=0)
+			if(movieList.get(225).getAvgVote().compareTo((float)8.7)!=0)
 				return false;
 			return true;
 		}
@@ -105,13 +105,33 @@ public class TestMovieDataReader {
 		}
 	}
 	
+	/*
+	 * This method runs all the tests
+	 */
+	public  void runTests() {
+		if(testReader()) {
+			System.out.println("Test Reader: PASSED");
+		}
+		else
+			System.out.println("Test Reader: FAILED");
+		if(testReaderExceptions()) {
+			System.out.println("Test Reader throws correct exception: PASSED");
+		}
+		else
+			System.out.println("Test Reader throws correct exception: FAILED");	
+		if(testMovieMethods()) {
+			System.out.println("Test Movie object methods all work as intended: PASSED");	
+		}
+		else
+			System.out.println("Test Movie object methods all work as intended: FAILED");	
+	}
+	
 	
 	
 
 	public static void main(String[] args) {
-		System.out.println("testReader(): "+testReader());
-		System.out.println("testReaderExceptions(): "+testReaderExceptions());
-		System.out.println("testMovieMethods(): "+testMovieMethods());
+		
+		(new TestMovieDataReader()).runTests();
 
 		
 
