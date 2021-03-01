@@ -69,6 +69,7 @@ public class Movie implements MovieInterface{
 	/*This method overrides the compareTo method and compares the movies based on their
 	 * average vote. It is designed so that the movies will be sorted in descending order
 	 * of the average votes.
+	 * Was changed to be in ascending order to fit Backend's implementation
 	 * */
 	@Override
 	public int compareTo(MovieInterface otherMovie) {
