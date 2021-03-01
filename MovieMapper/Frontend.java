@@ -12,6 +12,7 @@ import java.io.FileReader;
 import java.io.Reader;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Comparator;
 
 /**
  * This class represents the Frontend interface of the Movie Mapper program. Users can view their top three movies
@@ -226,6 +227,7 @@ public class Frontend {
             // displays selected ratings in one line, all separated by commas
             System.out.println("Selected Rating(s): ");
             List<String> selected = backend.getAvgRatings();
+            selected.sort(Comparator.comparing(Integer::valueOf));
             if (selected.size() >= 1) {
                 System.out.print(selected.get(0));
             }
