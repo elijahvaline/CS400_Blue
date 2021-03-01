@@ -24,7 +24,7 @@ Backend.class: Backend.java
 	javac Backend.java
 
 Movie.class: Movie.java
-	javac Main.java
+	javac Movie.java
 
 MovieDataReader.class: MovieDataReader.java
 	javac MovieDataReader.java
