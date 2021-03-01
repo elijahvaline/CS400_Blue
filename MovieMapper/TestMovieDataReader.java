@@ -63,9 +63,6 @@ public class TestMovieDataReader {
 		catch(FileNotFoundException e){
 			return true;
 		}
-		catch(IOException e){
-			return true;
-		}
 	}
 	
 	/*
@@ -111,13 +108,13 @@ public class TestMovieDataReader {
 	
 	
 
-	/*public static void main(String[] args) {
+	public static void main(String[] args) {
 		System.out.println("testReader(): "+testReader());
 		System.out.println("testReaderExceptions(): "+testReaderExceptions());
 		System.out.println("testMovieMethods(): "+testMovieMethods());
 
 		
 
-	}*/
+	}
 
 }
